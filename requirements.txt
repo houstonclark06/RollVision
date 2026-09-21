@@ -1,0 +1,3 @@
+# Google GenAI SDK used by src/rollvision.py.
+# Keep the next major version excluded until the code has been tested with it.
+google-genai>=1.70,<2
