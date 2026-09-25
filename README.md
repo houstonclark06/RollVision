@@ -1,194 +1,126 @@
-# RollVision
+ROLLVISION — “STRAIGHT OUTTA /tmp”
 
-RollVision is an ECEN 1400 assistive-technology project at the University of
-Colorado Boulder. A Raspberry Pi captures an image of the area near a
-wheelchair, sends it to Google Gemini for interpretation, and plays a spoken
-description for the user.
+[Intro]  
+Yeah.  
+ECEN fourteen hundred. CU Boulder.  
+One Raspberry Pi, a camera, and a README long enough  
+to wipe the ass of a municipal bus.  
+Drop the beat.
 
-> **Prototype status:** This is an early proof of concept, not a certified
-> mobility or collision-avoidance device. It must not be used as the user's
-> only source of navigation or safety information.
+[Verse 1]  
+Pi 4 on the rig, little silicon prick,  
+Camera v2.1 taking shots real quick.  
+Snap the scene, send it up, Gemini gets the mail,  
+Cloud goblin narrating like a drunkass fairy tale.  
 
-## Current system
+Headphones plugged in the three-point-five,  
+“This appears to be a table.” Holy shit, we’re live.  
+Got a credit-card computer with a god complex,  
+And a keyboard on the prototype demanding respect.  
 
-```text
-Camera Module -> Raspberry Pi -> Gemini vision -> Gemini TTS -> headphones
-                                      |
-                                      +-> espeak-ng fallback for speech only
-```
+Hit Enter: “Describe what’s around my chair.”  
+Hit D: “More details, you electric éclair.”  
+Hit R: “Read the sign, put the words in my ear.”  
+Hit Q: “Clock out, motherboard, disappear.”
 
-The Raspberry Pi runs the application. Gemini remains a cloud service, so
-scene interpretation requires internet access. The offline `espeak-ng`
-fallback can speak an existing text response, but it cannot analyze images.
+[Hook]  
+ROLLVISION! Snap that shit!  
+Send it to the cloud, let the robot spit!  
+Tiny little board, big computational ambition,  
+Raccoon in a lab coat passed the design submission.  
 
-The current prototype supports:
+ROLLVISION! Let that speaker fart!  
+We put a narrating toaster at the project’s heart.  
+Proof of concept, keep the limits in sight—  
+This ain’t certified to tell you where to roll tonight.
 
-- `Enter`: capture a new image and describe the scene
-- `d`: add detail about the most recent image
-- `r`: capture an image and read visible text
-- `q`: quit
+[Verse 2]  
+Bookworm on the OS, Python three-point-nine plus,  
+Virtual environment: a tiny nerd tour bus.  
+Pip install the goods, get the packages packed,  
+Dependency goblins doing squats in the back.  
 
-## Hardware
+`rpicam-jpeg`—that’s the camera command,  
+Old `libcamera` names? Not part of the plan.  
+ALSA got `aplay`, let the sound come through,  
+`espeak-ng` sounds like a fax taking a poo.  
 
-- Raspberry Pi 4
-- Raspberry Pi Camera Module v2.1
-- Headphones or a speaker connected to the Pi's 3.5 mm audio jack
-- Keyboard for prototype input
-- Internet connection for Gemini requests
+If cloud speech breaks, it can read existing text,  
+But it can’t inspect pictures—don’t get that shit mixed.  
+No internet? The scene analysis is toast,  
+Just a Pi holding a JPEG like a constipated ghost.  
 
-Physical buttons, battery operation, distance-sensor integration, and the
-optional companion web interface are not implemented yet.
+Put the key in `.env`, load it up backstage,  
+Don’t commit that shit to a public Git page.  
+Leak your secret key? That’s a clown-ass maneuver,  
+Like mailing your house keys to a random vacuum cleaner.
 
-## Software requirements
+[Hook]  
+ROLLVISION! Snap that shit!  
+Send it to the cloud, let the robot spit!  
+Tiny little board, big computational ambition,  
+Raccoon in a lab coat passed the design submission.  
 
-- Raspberry Pi OS Bookworm or newer
-- Python 3.9 or newer
-- `rpicam-jpeg` from Raspberry Pi's camera applications
-- ALSA `aplay`
-- `espeak-ng`
-- A Gemini API key
+ROLLVISION! Let that speaker fart!  
+We put a narrating toaster at the project’s heart.  
+Proof of concept, keep the limits in sight—  
+This ain’t certified to tell you where to roll tonight.
 
-Raspberry Pi OS Bookworm uses the `rpicam-*` camera commands. Older
-`libcamera-*` names are not supported by this prototype.
+[Verse 3]  
+Test the camera first, get the JPEG made,  
+List the audio devices like a nerd parade.  
+Hard-coded headphones—if your card ain’t the same,  
+Change `AUDIO_DEVICE`, stop screaming its name.  
 
-## Raspberry Pi setup
+Activate the venv, load the key, let it fly,  
+Run the program living in `src/rollvision.py`.  
+`/tmp/poc_shot.jpg` holds the latest view,  
+Then that picture leaves the Pi for the cloud to chew.  
 
-Clone the repository and enter it:
+Vision model, speech model, voice selection,  
+Capture size, warm-up—configuration inspection.  
+Model aliases change, so check before the show,  
+Or your demo’s just a terminal saying, “Fuck if I know.”
 
-```bash
-git clone https://github.com/houstonclark06/RollVision.git
-cd RollVision
-```
+[Breakdown — the liability goblin enters]  
+ONE FRAME AIN’T A FUCKING MEASURING TAPE.  
+THE CLOUD CAN GET IT WRONG. IT CAN HALLUCINATE.  
+Don’t make this your only navigation guide,  
+It’s a class prototype, not a certified ride.  
 
-Install the operating-system packages:
+Network gets slow? Description comes late.  
+Camera craps out? Program meets fate.  
+Retry loop retries shit that won’t get repaired,  
+Like yelling “ONE MORE TIME” at a sandwich you scared.
 
-```bash
-sudo apt update
-sudo apt install -y python3-venv espeak-ng alsa-utils
-```
+[Verse 4]  
+No buttons yet, no battery operation,  
+Distance sensor still awaiting integration.  
+No battery monitor, no startup routine,  
+No magic update elf living in the machine.  
 
-Create an isolated Python environment and install the Python dependency:
+Companion website? That’s future terrain,  
+Right now it’s a thought in the project’s brain.  
+Phone page someday: settings, status, the works,  
+Signed updates served by hypothetical clerks.  
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
+Before user tests, get privacy clear,  
+Handle broken cameras and the sound in the ear.  
+Measure the delay, log misleading descriptions,  
+Give the bug-report goblin some actual instructions.  
 
-Copy the environment-variable template:
+Team roles and contacts? Get the group’s okay,  
+Don’t publish everybody’s business like a jackass DJ.  
+CU Boulder, engineering in session,  
+Teaching a pocket-sized brick to deliver impressions.
 
-```bash
-cp .env.example .env
-```
+[Final Hook]  
+ROLLVISION! Snap that shit!  
+Send it to the cloud, let the robot spit!  
+Assistive-tech ambition, wires in formation,  
+A biscuit with a CPU demanding graduation.  
 
-Open `.env`, replace the placeholder with a real Gemini API key, and load it
-into the current terminal:
-
-```bash
-set -a
-source .env
-set +a
-```
-
-Never commit `.env` or a real API key.
-
-## Verify the hardware
-
-Confirm that the camera works:
-
-```bash
-rpicam-jpeg -n -t 1000 -o /tmp/rollvision-test.jpg
-```
-
-List audio devices:
-
-```bash
-aplay -l
-```
-
-The prototype currently expects this device:
-
-```text
-plughw:CARD=Headphones,DEV=0
-```
-
-If your Pi reports a different card or device, update `AUDIO_DEVICE` in
-`src/rollvision.py` before running the program.
-
-## Run RollVision
-
-With the virtual environment active and `GEMINI_API_KEY` loaded:
-
-```bash
-python src/rollvision.py
-```
-
-Images are temporarily written to `/tmp/poc_shot.jpg`. They are sent to the
-Gemini API for analysis and are not committed to the repository.
-
-## Repository structure
-
-```text
-RollVision/
-├── src/
-│   └── rollvision.py   Raspberry Pi proof of concept
-├── .env.example        Safe environment-variable template
-├── .gitignore          Local and generated files excluded from Git
-├── CONTRIBUTING.md     Team Git and review workflow
-├── LICENSE             Project license
-├── README.md           Setup and project overview
-└── requirements.txt    Python dependency range
-```
-
-## Configuration
-
-The current constants are near the top of `src/rollvision.py`:
-
-- `VISION_MODEL`: Gemini image-analysis model
-- `TTS_MODEL`: Gemini text-to-speech model
-- `TTS_VOICE`: selected cloud voice
-- `CAPTURE_SIZE`: captured image resolution
-- `WARMUP_MS`: camera exposure warm-up time
-- `AUDIO_DEVICE`: ALSA playback device
-
-The two Gemini model aliases can change or be retired. Verify them against
-Google's current model documentation before a demonstration.
-
-## Known limitations and safety concerns
-
-- Gemini can produce incomplete or incorrect descriptions.
-- A single camera image cannot provide safety-grade distance measurements.
-- Network latency and outages can delay or prevent a description.
-- Camera failures currently stop the program instead of producing a spoken
-  recovery message.
-- The retry loop currently retries every exception, including some errors that
-  will not improve with another attempt.
-- The audio device is hard-coded for one Raspberry Pi configuration.
-- Images leave the Raspberry Pi and are processed by a cloud service.
-- The program has no physical button, startup service, automatic update
-  mechanism, battery monitoring, or companion interface yet.
-- The distance sensor described in the project proposal is not integrated.
-
-Before user testing, the team should define a privacy policy, add explicit
-camera and audio error handling, test response latency, and create a procedure
-for reporting unsafe or misleading descriptions.
-
-## Planned companion interface
-
-A future phone-accessible page may run locally on the Raspberry Pi for status,
-configuration, diagnostics, and signed software updates. The core capture and
-audio workflow should continue working without that interface. No companion
-web application is included in the repository yet.
-
-## Documentation
-
-- [Google GenAI SDK](https://ai.google.dev/gemini-api/docs/libraries)
-- [Gemini API quickstart](https://ai.google.dev/gemini-api/docs/get-started)
-- [Raspberry Pi camera software](https://www.raspberrypi.com/documentation/computers/camera_software.html)
-
-## Team
-
-RollVision is developed for ECEN 1400 at the University of Colorado Boulder.
-Team members should add agreed roles and contact information only after the
-group approves publishing them.
+ROLLVISION! That’s the proposition:  
+Capture, cloud, speech—a scene-description mission.  
+Still got bugs, still got work, still building the vision—  
+Now somebody tell the bass to `q` before it shits the kitchen.
