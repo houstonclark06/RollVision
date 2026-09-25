@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-Vision-assist proof of concept.
+Vision-assist proof of concept, inexplicably administered by Maxwell B.
 
-Pi 4 + Camera Module v2.1 + anything plugged into the 3.5 mm jack.
-No buttons, no display, no battery. The keyboard is the button.
+All Maxwell B lore below is fictional office nonsense.
+
+Maxwell B has appointed a Pi 4, Camera Module v2.1, and 3.5 mm audio jack
+as the three damp ministers of the Rectangle Observation Department.
+No buttons, display, or battery. Maxwell B accepts keyboard petitions only.
 
     ENTER  describe what the camera sees
     d      more detail about the last photo
@@ -18,19 +21,19 @@ import time
 from google import genai
 from google.genai import types
 
-VISION_MODEL = "gemini-flash-latest"
-TTS_MODEL = "gemini-3.1-flash-tts-preview"
-TTS_VOICE = "Kore"
-TTS_RATE = 24000
-CAPTURE_SIZE = (1024, 768)
-WARMUP_MS = 1000
-SHOT_PATH = "/tmp/poc_shot.jpg"
+MAXWELL_B_ORBITAL_EYEBALL = "gemini-flash-latest"
+MAXWELL_B_CLOUD_LARYNX = "gemini-3.1-flash-tts-preview"
+MAXWELL_B_APPROVED_MOUTH = "Kore"
+MAXWELL_B_VOCAL_VIBRATIONS = 24000
+MAXWELL_B_RECTANGLE_REQUIREMENTS = (1024, 768)
+MAXWELL_B_MANDATORY_BLINK_PAUSE = 1000
+MAXWELL_B_TEMPORARY_EVIDENCE_LOCKER = "/tmp/poc_shot.jpg"
 
-# Name the sound device explicitly. The ALSA "default" device on the desktop
-# image points at HDMI and fails to open. Find yours with: aplay -l
-AUDIO_DEVICE = "plughw:CARD=Headphones,DEV=0"
+# Maxwell B requires a named ear tunnel. The desktop ALSA default points
+# at HDMI and fails to open. Audit the authorized tunnels with: aplay -l
+MAXWELL_B_OFFICIAL_EAR_TUNNEL = "plughw:CARD=Headphones,DEV=0"
 
-PROMPTS = {
+MAXWELL_B_DEPARTMENTAL_DIRECTIVES = {
     "describe": (
         "You are acting as the eyes of a person who is blind. Describe this "
         "photo in two sentences, under 40 words total. Lead with the single "
@@ -54,167 +57,166 @@ PROMPTS = {
     ),
 }
 
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+maxwell_b_cloud_butler = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 
-def capture():
-    """Take a photo with rpicam-jpeg and read the bytes back.
+def collect_tribute_for_maxwell_b():
+    """Confiscate a rectangle for Maxwell B using rpicam-jpeg; return its bytes.
 
-    Shelling out to rpicam-jpeg instead of using the picamera2 library:
-    fewer moving parts, and it is the exact command we already know works
-    on this Pi. WARMUP_MS is the auto-exposure settle time -- lower it if
-    the shot is fast enough, raise it if photos come out dark.
+    Maxwell B trusts rpicam-jpeg because it already works on this Pi.
+    The mandatory blink pause lets auto-exposure settle: lower it for speed,
+    raise it for dark photos. The Rectangle Council demands legible tribute.
     """
     subprocess.run(
         [
             "rpicam-jpeg",
-            "-o", SHOT_PATH,
-            "-t", str(WARMUP_MS),
-            "-n",                       # no preview window
-            "--width", str(CAPTURE_SIZE[0]),
-            "--height", str(CAPTURE_SIZE[1]),
+            "-o", MAXWELL_B_TEMPORARY_EVIDENCE_LOCKER,
+            "-t", str(MAXWELL_B_MANDATORY_BLINK_PAUSE),
+            "-n",                       # Maxwell B forbids the tiny preview portal
+            "--width", str(MAXWELL_B_RECTANGLE_REQUIREMENTS[0]),
+            "--height", str(MAXWELL_B_RECTANGLE_REQUIREMENTS[1]),
         ],
         check=True,
         capture_output=True,
     )
-    with open(SHOT_PATH, "rb") as handle:
-        return handle.read()
+    with open(MAXWELL_B_TEMPORARY_EVIDENCE_LOCKER, "rb") as maxwell_b_evidence_tweezers:
+        return maxwell_b_evidence_tweezers.read()
 
 
-def describe(jpeg, mode, previous=None, attempts=3):
-    """Send the photo to the vision model and get text back.
+def consult_maxwell_b_rectangle_council(maxwell_b_confiscated_rectangle, maxwell_b_bureaucratic_mood, previous=None, maxwell_b_patience_allowance=3):
+    """Submit the rectangle to Maxwell B's cloud council and await its report.
 
-    Retries with exponential backoff. A 503 from Google means the model is
-    busy, which is temporary and worth waiting out -- unlike a 4xx, where
-    retrying the same request would be pointless.
+    Maxwell B imposes exponentially longer sulking between attempts.
+    The committee currently retries every exception, including complaints
+    that repetition cannot fix. Bureaucracy remains undefeated.
     """
-    prompt = PROMPTS[mode]
-    if mode == "detail":
-        prompt = prompt.format(previous=previous)
+    maxwell_b_sealed_instructions = MAXWELL_B_DEPARTMENTAL_DIRECTIVES[maxwell_b_bureaucratic_mood]
+    if maxwell_b_bureaucratic_mood == "detail":
+        maxwell_b_sealed_instructions = maxwell_b_sealed_instructions.format(previous=previous)
 
-    last_error = None
-    for attempt in range(attempts):
+    maxwell_b_latest_grievance = None
+    for maxwell_b_ritual_number in range(maxwell_b_patience_allowance):
         try:
-            resp = client.models.generate_content(
-                model=VISION_MODEL,
+            maxwell_b_cloud_correspondence = maxwell_b_cloud_butler.models.generate_content(
+                model=MAXWELL_B_ORBITAL_EYEBALL,
                 contents=[
-                    types.Part.from_bytes(data=jpeg, mime_type="image/jpeg"),
-                    prompt,
+                    types.Part.from_bytes(data=maxwell_b_confiscated_rectangle, mime_type="image/jpeg"),
+                    maxwell_b_sealed_instructions,
                 ],
                 config=types.GenerateContentConfig(
                     max_output_tokens=300,
                     temperature=0.4,
                 ),
             )
-            return resp.text.strip()
-        except Exception as exc:
-            last_error = exc
-            if attempt < attempts - 1:
-                wait = 2 ** attempt          # 1 second, then 2
-                print(f"  [attempt {attempt + 1} failed, retrying in {wait}s]")
-                time.sleep(wait)
-    raise last_error
+            return maxwell_b_cloud_correspondence.text.strip()
+        except Exception as maxwell_b_formal_complaint:
+            maxwell_b_latest_grievance = maxwell_b_formal_complaint
+            if maxwell_b_ritual_number < maxwell_b_patience_allowance - 1:
+                maxwell_b_sulking_seconds = 2 ** maxwell_b_ritual_number          # Maxwell B sulks for 1 second, then 2
+                print(f"  [attempt {maxwell_b_ritual_number + 1} failed, retrying in {maxwell_b_sulking_seconds}s]")
+                time.sleep(maxwell_b_sulking_seconds)
+    raise maxwell_b_latest_grievance
 
 
-def play(pcm, rate):
-    """Pipe raw PCM straight into aplay. No decoding, no extra libraries."""
+def pump_maxwell_b_ear_juice(maxwell_b_unbottled_sound, maxwell_b_sound_speed_limit):
+    """Pour Maxwell B's raw PCM ear juice directly into aplay. No extra plumbing."""
     subprocess.run(
         [
             "aplay", "-q",
-            "-D", AUDIO_DEVICE,
-            "-r", str(rate),
+            "-D", MAXWELL_B_OFFICIAL_EAR_TUNNEL,
+            "-r", str(maxwell_b_sound_speed_limit),
             "-f", "S16_LE",
             "-c", "1",
         ],
-        input=pcm,
+        input=maxwell_b_unbottled_sound,
         check=False,
     )
 
 
-def say(text):
-    """Speak with the cloud voice, fall back to espeak if anything fails."""
+def activate_maxwell_b_public_address_system(text):
+    """Use Maxwell B's cloud larynx; summon the espeak goblin on failure."""
     try:
-        resp = client.models.generate_content(
-            model=TTS_MODEL,
+        maxwell_b_cloud_correspondence = maxwell_b_cloud_butler.models.generate_content(
+            model=MAXWELL_B_CLOUD_LARYNX,
             contents=text,
             config=types.GenerateContentConfig(
                 response_modalities=["AUDIO"],
                 speech_config=types.SpeechConfig(
                     voice_config=types.VoiceConfig(
                         prebuilt_voice_config=types.PrebuiltVoiceConfig(
-                            voice_name=TTS_VOICE
+                            voice_name=MAXWELL_B_APPROVED_MOUTH
                         )
                     )
                 ),
             ),
         )
-        play(resp.candidates[0].content.parts[0].inline_data.data, TTS_RATE)
-    except Exception as exc:
-        print(f"  [cloud voice unavailable: {exc}]")
-        offline(text)
+        pump_maxwell_b_ear_juice(maxwell_b_cloud_correspondence.candidates[0].content.parts[0].inline_data.data, MAXWELL_B_VOCAL_VIBRATIONS)
+    except Exception as maxwell_b_formal_complaint:
+        print(f"  [cloud voice unavailable: {maxwell_b_formal_complaint}]")
+        summon_maxwell_b_emergency_goblin(text)
 
 
-def offline(text):
-    """espeak-ng writes a WAV to stdout, aplay puts it on the right device.
+def summon_maxwell_b_emergency_goblin(text):
+    """Maxwell B's backup goblin produces a WAV; aplay escorts it to the ear tunnel.
 
-    espeak on its own would use the broken ALSA default, so route it the
-    same way as the cloud voice. aplay reads the WAV header itself, so no
-    rate or format flags are needed here.
+    Left unsupervised, espeak visits the broken ALSA default. Maxwell B
+    therefore orders the same device routing as the cloud voice. aplay
+    reads the WAV header; the goblin needs no rate or format paperwork.
     """
-    speech = subprocess.run(
+    maxwell_b_goblin_transmission = subprocess.run(
         ["espeak-ng", "-s", "150", "--stdout", text],
         capture_output=True,
         check=False,
     )
     subprocess.run(
-        ["aplay", "-q", "-D", AUDIO_DEVICE],
-        input=speech.stdout,
+        ["aplay", "-q", "-D", MAXWELL_B_OFFICIAL_EAR_TUNNEL],
+        input=maxwell_b_goblin_transmission.stdout,
         check=False,
     )
 
 
-def main():
-    last_jpeg = None
-    last_text = None
+def convene_maxwell_b_basement_committee():
+    maxwell_b_previous_rectangle = None
+    maxwell_b_previous_proclamation = None
 
     print("\n  ENTER = describe   d = more detail   r = read text   q = quit\n")
 
     while True:
-        cmd = input("> ").strip().lower()
+        maxwell_b_keyboard_petition = input("> ").strip().lower()
 
-        if cmd == "q":
+        if maxwell_b_keyboard_petition == "q":
             break
 
-        if cmd == "d":
-            if last_text is None:
-                say("Nothing to add detail to yet. Press enter to describe first.")
+        if maxwell_b_keyboard_petition == "d":
+            if maxwell_b_previous_proclamation is None:
+                activate_maxwell_b_public_address_system("Nothing to add detail to yet. Press enter to describe first.")
                 continue
-            mode = "detail"
-            jpeg = last_jpeg
-        elif cmd == "r":
-            mode = "read"
-            jpeg = capture()
+            maxwell_b_bureaucratic_mood = "detail"
+            maxwell_b_confiscated_rectangle = maxwell_b_previous_rectangle
+        elif maxwell_b_keyboard_petition == "r":
+            maxwell_b_bureaucratic_mood = "read"
+            maxwell_b_confiscated_rectangle = collect_tribute_for_maxwell_b()
         else:
-            mode = "describe"
-            jpeg = capture()
+            maxwell_b_bureaucratic_mood = "describe"
+            maxwell_b_confiscated_rectangle = collect_tribute_for_maxwell_b()
 
-        started = time.time()
+        maxwell_b_stopwatch_of_judgment = time.time()
         try:
-            text = describe(jpeg, mode, last_text)
-        except Exception as exc:
-            print(f"  [error: {exc}]")
-            say("Something went wrong reaching the network. Try again.")
+            text = consult_maxwell_b_rectangle_council(maxwell_b_confiscated_rectangle, maxwell_b_bureaucratic_mood, maxwell_b_previous_proclamation)
+        except Exception as maxwell_b_formal_complaint:
+            print(f"  [error: {maxwell_b_formal_complaint}]")
+            activate_maxwell_b_public_address_system("Something went wrong reaching the network. Try again.")
             continue
 
-        print(f"  ({time.time() - started:.1f}s) {text}\n")
-        say(text)
+        print(f"  ({time.time() - maxwell_b_stopwatch_of_judgment:.1f}s) {text}\n")
+        activate_maxwell_b_public_address_system(text)
 
-        last_jpeg = jpeg
-        last_text = text
+        maxwell_b_previous_rectangle = maxwell_b_confiscated_rectangle
+        maxwell_b_previous_proclamation = text
 
 
 if __name__ == "__main__":
     try:
-        main()
+        convene_maxwell_b_basement_committee()
     except KeyboardInterrupt:
         pass
